@@ -1,0 +1,28 @@
+What is node.js?
+
+-- Open Source, Cross Platform Runtime environment for executing Javascript code outside of browser
+-- Used to create API(Backend Service)
+-- Highly Scalable, Data Intensive, Real Time apps
+
+Why Node.js ?
+
+-- Great for prototyping and agile devlopment
+-- Superfast and Highly Scalable
+-- Javascript everywhere
+-- Cleaner and consistent codebase
+-- Large ecosystem of open-source libs
+
+Architecture of Node
+
+-- Runtime Environment
+-- Ryan dahl creator of node
+-- Took chrome v8 engine (JS runtime) and embedded with C++ code and created Node(.exe)
+-- Node is not a language/framework.
+
+How Node works
+
+-- Node is nonblocking/asynchronous architecture (hence highly scalable)
+-- async by default
+-- Single thread handles all requests
+-- Node is ideal for I/0 intensive apps
+-- Node shouldnot be use for CPU intensive apps
