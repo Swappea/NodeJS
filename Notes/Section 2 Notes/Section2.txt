@@ -1,0 +1,79 @@
+Node Module System
+
+Global Object
+
+--> console, setTimeout, clearTimeout, setInterval, clearInterval is part of global scope
+--> in javascript window object is present --> this is not present in nodejs
+
+--> in nodejs, it is global object
+--> variables are not attached to global scope --> variable scope is limited to the file it is written in
+
+Modules
+
+--> fn's are attached to global scope
+--> so modularity is required
+--> module is not part of global object
+--> module obj looks like below
+Module {
+  id: '.',
+  exports: {},
+  parent: null,
+  filename: 'C:\\Angular\\NodeJS Mosh\\NodeJS\\Projects\\Section 2 Project\\app.js',
+  loaded: false,
+  children: [],
+  paths:
+   [ 'C:\\Angular\\NodeJS Mosh\\NodeJS\\Projects\\Section 2 Project\\node_modules',
+     'C:\\Angular\\NodeJS Mosh\\NodeJS\\Projects\\node_modules',
+     'C:\\Angular\\NodeJS Mosh\\NodeJS\\node_modules',
+     'C:\\Angular\\NodeJS Mosh\\node_modules',
+     'C:\\Angular\\node_modules',
+     'C:\\node_modules' ] }
+
+--> Creating and exporting a module 
+    --> module.exports.log = log;
+    --> module.exports.endpoint = url;
+
+--> Loading a module
+    --> const moduleName = require('module path(relative path)');
+    --> store module in an constant(best pratice)
+
+--> Module Wrapper fn
+    --> module code is wrapped in a fn
+    --> (function (exports, require, module, __filename, __dirname) {
+        // module code
+        // export
+    })
+    --> the above fn is IIFE --> Imediately Invoked Function Expression
+
+NodeJS has builtin modules 
+
+Path Module
+    --> const path = require('path');
+    --> path.parse(filename) gives path object
+
+OS Module
+    --> const os = require('os');
+    --> os.freemem() etc fn are available
+    --> this is not possible in client side javascript(browser)
+
+FileSystem Module
+    --> const fs = require('fs');
+    --> file system has sync and async fn
+    --> async method take one argument as file path, 2nd argument as callback fn which has 2 args(err and files)
+    --> async methods are preffered
+
+Events Module
+    --> const EventEmmitter = require('events'); 
+    --> EventEmmitter is a class
+    --> const emitter = new EventEmmitter(); 
+    --> emitter is an obj
+    --> emitter.emit('event name', arguments(optional params)) is a fn which emits event i.e. tells everyone that an event took place
+    --> emitter.on('event name', callbackFn(optional params)) which listens to event and has callback fn to handle the event
+    --> order matters --> listener should be before emit event
+    --> Creating an class and extends EventEmmitter --> this class has all the functionality of events and its own functionality
+
+HTTP Module
+    --> const http = require('http');
+    --> const server = http.createServer();
+    --> this server class extends EventEmmitter and has all the fns of EventEmmitter
+    
