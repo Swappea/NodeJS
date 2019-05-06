@@ -1,0 +1,121 @@
+Express JS Framework
+
+--> fast and lightweight Framework for building web appln
+--> npm init --yes --> package.json
+--> npm install express --> to install express Framework
+
+Building a web server using express
+
+--> const express = require('express')
+--> express is a fn
+--> const app = express(); returns object of type Express
+
+Node Monitor
+
+--> install NodeMon
+--> npm i -g nodemon
+--> it is used to monitor changes to the files(so no need to run node file.js again)
+--> nodemon file.js
+
+Environment Variables
+
+--> Its value is set outside of appln  
+--> set using process object with prop env and its property PORT
+--> const port = process.env.PORT || 3000
+--> and then set in cmd using Export(mac) or set(windows)
+
+Route Parameters
+
+--> app.get('/api/courses/:id', (req, res) => {
+        res.send(req.params.id);
+    });
+--> to get route params --> req.params
+--> to get query params --> req.query
+
+Handling HTTP Get requests
+
+--> app.get('/api/courses/:id', (req, res) => {
+        const course = courses.find(c => c.id === parseInt(req.params.id));
+        if (!course) res.status(404).send(`The course with id ${req.params.id} was not found`);
+        res.send(course);
+    });
+
+Handling HTTP Post requests
+
+--> app.use(express.json()); to handle json body --> its kind of middleware explained later
+--> app.post('/api/courses', (req, res) => {
+        const { error } = validateCourse(req.body);
+
+        // 400 bad request
+        if (error) return res.status(400).send(error.details[0].message);
+
+        const course = {
+            id: courses.length + 1,
+            name: req.body.name
+        };
+        courses.push(course);
+        res.send(course);
+    });
+
+Input validation
+
+--> npm package JOI
+--> npm i JOI
+--> const Joi = require('joi');
+--> Joi is a class
+--> need to define a schema 
+--> const schema = {
+        name: Joi.string().min(3).required()
+    };
+--> const result = Joi.validate(req.body, schema);
+
+--> when result is good --> { error: null,
+  value: { name: 'new course' },
+  then: [Function: then],
+  catch: [Function: catch] }
+
+--> error will be filled all the error messages
+
+Handling HTTP Put requests
+
+--> 
+    app.put('/api/courses/:id', (req, res) => {
+        // look up the course 
+        // if not exist, return 404
+        const course = courses.find(c => c.id === parseInt(req.params.id));
+        if (!course) return res.status(404).send(`The course with id ${req.params.id} was not found`);
+
+        // validate and if invalid return 400 bad req
+        //const result = validateCourse(req.body);
+        // using destructuring
+        const { error } = validateCourse(req.body); // similar to result.error
+
+        // 400 bad request
+        if (error) return res.status(400).send(error.details[0].message);
+
+        // else update and return updated course
+        course.name = req.body.name;
+        res.send(course);
+    });
+
+    function validateCourse(course) {
+        const schema = {
+            name: Joi.string().min(3).required()
+        };
+
+        return Joi.validate(course, schema);
+    }
+
+Handling HTTP Delete requests
+
+--> app.delete('/api/courses/:id', (req, res) => {
+        // look up the course 
+        // if not exist, return 404
+        const course = courses.find(c => c.id === parseInt(req.params.id));
+        if (!course) return res.status(404).send(`The course with id ${req.params.id} was not found`);
+
+        // delete and return course which was deleted
+        const index = courses.indexOf(course);
+        courses.splice(index, 1);
+        res.send(course);
+    });
