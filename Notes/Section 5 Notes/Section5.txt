@@ -1,0 +1,103 @@
+Express Advance Topics
+
+MiddleWare
+ 
+--> Core concepts
+--> A MiddleWare fn is a fn  which takes request from the client and sends response to the client or
+    sends it to another middleware fn
+--> in express, router handle fn is middleware fn
+--> express.json() returns middleware fn, its job is to read the request and if there is json obj in body then it parses the body obj
+    and it sets req.body
+--> there are few builtin middleware fn
+--> we can create custom middleware fn and we can do logging, authorization, authentication
+
+Builtin express middleware fn's
+--> express.json()
+--> express.urlencoded() -> // key=value&key=value --> payload for form url encoded
+--> app.use(express.static('public')); we can serve static content using this file
+
+Request Processing Pipeline
+--> Request > json() > route() > response
+
+Creating a Custom MiddleWare
+
+--> app.use((req, res, next) => {
+        console.log('Logging...');
+        next(); // to pass control to next middle ware fn... if we dont do this req will end up hanging
+    });
+
+3rd party middleware
+--> provided on api on expres wbsite
+
+Helmet 
+--> use for secure http by setting header
+--> npm i helmet --save
+--> const helmet = require('helmet');
+--> helmet is a fn
+
+Morgan
+--> logging HTTP request
+--> npm i morgan --save
+--> const morgan = require('morgan');
+--> app.use(morgan('tiny'));
+--> morgan is a fn
+--> we can configure it to log to a file
+
+Environments
+--> to get environment name process.env.NODE_env // if not set undefined
+
+--> app.get('env') // if env not set then return development by default
+
+--> if (app.get('env') === 'development') {
+    app.use(morgan('tiny'));
+    console.log('Morgan enabled...');
+}
+
+set NODE_ENV=production
+
+Configuration
+
+--> npm rc package
+--> another package npm config 
+--> create config folder with json files
+--> json contains different config files
+    // Configuration
+    console.log(`Application Name: ${config.get('name')}`);
+    console.log(`Mail Server : ${config.get('mail.host')}`);
+    console.log(`Mail Password : ${config.get('mail.password')}`);
+
+Debugging
+
+--> debug package
+--> use env variable to enable or disable debug
+--> avoid using console.log
+const startupDebugger = require('debug')('app:startup');
+const dbDebugger = require('debug')('app:db');
+set DEBUG=app:startup // single namespace
+set DEBUG=app:startup,app:db // multiple namespace
+set DEBUG=app:* // all debugging namespace
+
+--> DEBUG=app:startup nodemon index.js // at runtime
+
+Templating Engine
+--> sending markup to client
+--> various available --> Pug, Mustache, EJS
+
+Pug
+
+--> npm i pug --save
+--> app.set('view engine', 'pug'); --> no need to require
+--> app.set('views', './views'); // all templates insider folder view(optional setting)
+--> create index.pug
+app.get('/', (req, res) => {
+    res.render('index.pug', { title: 'My Express App', message: 'Hello World'});
+});
+
+Restructuring ExpressJS Application
+
+-->  const express = require('express');
+    const router = express.Router();
+--> we cannot use app as this is the different file
+--> so we get the router and set the routes then export this routes
+// setting the router api
+app.use('./api/courses', courses);
