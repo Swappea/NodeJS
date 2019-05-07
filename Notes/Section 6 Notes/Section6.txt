@@ -1,0 +1,91 @@
+Asynchronouse Javascript
+
+3 patterns to deal with async code
+    1) Callbacks
+    2) Promises
+    3) Async/Await
+
+Callbacks
+
+--> getUser(1, (user) => {
+        console.log('User:', user);
+    });
+    console.log('After');
+
+
+    function getUser(id, callback) {
+        setTimeout(() => {
+            console.log('Reading user from db...');
+            callback({ id: id, gitHubUsername: 'mosh' });
+        }, 2000);
+    }
+--> callback hell --> callbacks inside callbacks (also  called christmas tree problem)
+Named fn's
+--> Replace anonymous fn with named fn
+
+getUser(1, displayUser);
+
+function displayUser(user) {
+    console.log('User:', user);
+    getRepositories(user, displayRepositories);
+}
+
+function displayRepositories(repos) {
+    console.log(`Repo's: ${repos}`);
+    getCommits(repos[1], displayCommits);
+}
+
+function displayCommits(commits) {
+    console.log('Commits', commits);
+}
+
+Promises
+
+--> is an obj which holds eventual result of async operation
+--> in 3 states
+--> pending state, fulfilled or resolved, rejected state
+
+const p = new Promise((resolve, reject) => {
+
+    setTimeout(() => {
+        // resolve(1); // pending => resolved
+        // reject(new Error('something went wrong')); // pending => rejected
+    }, 2000);
+});
+
+p.then((result) => {
+    console.log(`Result: ${result}`);
+}).catch((error) => {
+    console.log(`Error: ${error.message}`);
+});
+
+Chained Promises
+--> getUser(1)
+        .then((user) => getRepositories(user.gitHubUsername))
+        .then((repos) => getCommits(repos[0]))
+        .then((commits) => console.log('Commits', commits));
+
+
+Creating Settled Promises
+--> already resolved or rejected promises
+--> const p = Promise.resolve({ id: 1});
+    p.then(user => { console.log(user)});
+
+
+Running Parallel Promises
+
+--> returns promises of both
+Promise.all([p1, p2])   
+       .then((result) => {
+            console.log(result);
+       });
+
+--> returns only one promise which happens early
+Promise.race([p1, p2])
+    .then((result) => {
+        console.log(result);
+    });
+
+Async and Await
+--> syntactical sugar over promises
+--> write async code using sync code
