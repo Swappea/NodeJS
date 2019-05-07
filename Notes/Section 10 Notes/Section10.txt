@@ -1,0 +1,9 @@
+Authorization and Authentication
+
+Authentication 
+
+--> process of identifying user of they claim they are
+
+Authorization
+
+--> User has right permission
