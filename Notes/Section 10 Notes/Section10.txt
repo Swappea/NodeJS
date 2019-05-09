@@ -6,4 +6,28 @@ Authentication
 
 Authorization
 
---> User has right permission
+--> User has right permission (role based)
+
+
+joipasswordcomplexity npm package for password complexity 
+bcrypt for hashing password
+a salt is random string added in pwd so different password will be outputed
+async function run() {
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash('1234', salt);
+    console.log(salt);
+}
+
+
+JSON Web Token
+--> string indetifies the user
+--> jwt.sign({ _id: user.id }, privatekey)
+
+
+setting header
+
+res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+
+
+// 401 UNAUTHORIZED
+// 403 FORBIDDEN
